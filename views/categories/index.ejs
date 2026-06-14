@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<section class="page-head">
+  <div>
+    <h1>Categories</h1>
+    <p class="subtitle">Organize your expenses by category</p>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Add Category</h2>
+  </div>
+
+  <% if (typeof error !== 'undefined' && error) { %>
+    <p class="error-msg"><%= error %></p>
+  <% } %>
+
+  <form action="/categories/add" method="POST" class="form-row">
+    <input type="text" name="name" placeholder="e.g. Travel" required>
+    <button type="submit" class="btn btn-primary">Add</button>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Existing Categories</h2>
+  </div>
+
+  <% if (categories.length === 0) { %>
+    <p class="empty">No categories yet. Add one above.</p>
+  <% } else { %>
+    <ul class="category-list">
+      <% categories.forEach(function(cat) { %>
+        <li><%= cat.name %></li>
+      <% }); %>
+    </ul>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>
