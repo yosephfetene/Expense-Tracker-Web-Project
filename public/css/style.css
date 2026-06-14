@@ -127,6 +127,38 @@ body {
   margin-bottom: 24px;
 }
 
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.comparison-card {
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.comparison-card .trend {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.trend-up {
+  color: #1b7a1b;
+}
+
+.trend-down {
+  color: #c92a2a;
+}
+
+.trend.muted {
+  color: var(--mid-gray);
+}
+
 .stat-card {
   background-color: var(--white);
   border: 1px solid var(--border);
