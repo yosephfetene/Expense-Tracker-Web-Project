@@ -45,7 +45,7 @@ const addExpense = async (req, res, next) => {
   try {
     const { title, amount, expense_date, category_id } = req.body;
 
-    if (!title  !amount  !expense_date) {
+    if (!title || !amount || !expense_date) {
       const categories = await categoryModel.getAllCategories();
       return res.status(400).render('expenses/add', {
         title: 'Add Expense',
@@ -58,7 +58,7 @@ const addExpense = async (req, res, next) => {
       title.trim(),
       amount,
       expense_date,
-      category_id  null
+      category_id || null
     );
 
     res.redirect('/expenses');
@@ -96,7 +96,7 @@ const updateExpense = async (req, res, next) => {
       title.trim(),
       amount,
       expense_date,
-      category_id  null
+      category_id || null
     );
 
     res.redirect('/expenses');
