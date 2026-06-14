@@ -1,5 +1,3 @@
-// Centralized error-handling middleware.
-// Express recognizes this as an error handler because it takes 4 arguments.
 const errorHandler = (err, req, res, next) => {
   console.error('Error:', err.message);
   console.error(err.stack);
