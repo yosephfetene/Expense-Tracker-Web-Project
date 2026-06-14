@@ -1,0 +1,19 @@
+{
+  "name": "expense-tracker",
+  "version": "1.0.0",
+  "description": "Simple expense tracker built with Express, EJS and PostgreSQL (MVC structure)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
