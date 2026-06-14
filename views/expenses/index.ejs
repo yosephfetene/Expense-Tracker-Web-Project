@@ -1,0 +1,46 @@
+<%- include('../partials/header') %>
+
+<section class="page-head">
+  <div>
+    <h1>Expenses</h1>
+    <p class="subtitle">All recorded expenses</p>
+  </div>
+  <a href="/expenses/add" class="btn btn-primary">+ Add Expense</a>
+</section>
+
+<section class="panel">
+  <% if (expenses.length === 0) { %>
+    <p class="empty">No expenses recorded yet. <a href="/expenses/add">Add your first one</a>.</p>
+  <% } else { %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Date</th>
+          <th class="num">Amount</th>
+          <th class="actions-col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% expenses.forEach(function(expense) { %>
+          <tr>
+            <td><%= expense.title %></td>
+            <td><span class="tag"><%= expense.category_name || 'Uncategorized' %></span></td>
+            <td><%= new Date(expense.expense_date).toLocaleDateString() %></td>
+            <td class="num">$<%= Number(expense.amount).toFixed(2) %></td>
+            <td class="actions">
+              <a href="/expenses/edit/<%= expense.id %>" class="btn btn-small">Edit</a>
+              <form action="/expenses/delete/<%= expense.id %>" method="POST" class="inline-form"
+                    onsubmit="return confirm('Delete this expense?');">
+                <button type="submit" class="btn btn-small btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>
