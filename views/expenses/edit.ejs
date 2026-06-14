@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+
+<section class="page-head">
+  <div>
+    <h1>Edit Expense</h1>
+    <p class="subtitle">Update an existing expense</p>
+  </div>
+</section>
+
+<section class="panel">
+  <form action="/expenses/edit/<%= expense.id %>" method="POST" class="form">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" value="<%= expense.title %>" required>
+    </div>
+
+    <div class="form-group">
+      <label for="amount">Amount ($)</label>
+      <input type="number" id="amount" name="amount" step="0.01" min="0" value="<%= expense.amount %>" required>
+    </div>
+
+    <div class="form-group">
+      <label for="expense_date">Date</label>
+      <input type="date" id="expense_date" name="expense_date"
+             value="<%= new Date(expense.expense_date).toISOString().split('T')[0] %>" required>
+    </div>
+
+    <div class="form-group">
+      <label for="category_id">Category</label>
+      <select id="category_id" name="category_id">
+        <option value="">Uncategorized</option>
+        <% categories.forEach(function(cat) { %>
+          <option value="<%= cat.id %>" <%= cat.id === expense.category_id ? 'selected' : '' %>>
+            <%= cat.name %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Update Expense</button>
+      <a href="/expenses" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>
