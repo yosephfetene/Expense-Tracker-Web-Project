@@ -1,0 +1,25 @@
+<%- include('../partials/header') %>
+
+<section class="page-heading">
+  <div>
+    <h1>Edit Category</h1>
+    <p>Rename this category. Existing expenses will keep using it.</p>
+  </div>
+</section>
+
+<section class="panel narrow">
+  <% if (error) { %>
+    <p class="message error"><%= error %></p>
+  <% } %>
+
+  <form action="/categories/edit/<%= category.id %>" method="POST">
+    <label for="name">Category name</label>
+    <input id="name" name="name" type="text" maxlength="50" required value="<%= category.name %>">
+    <div class="form-actions">
+      <button type="submit" class="button primary">Save Changes</button>
+      <a href="/categories" class="button">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,40 +1,66 @@
 <%- include('../partials/header') %>
 
-<section class="page-head">
+<section class="page-heading">
   <div>
-    <h1>Categories</h1>
-    <p class="subtitle">Organize your expenses by category</p>
+    <h1>Category Management</h1>
+    <p>Add, edit, and safely delete expense categories.</p>
   </div>
 </section>
 
+<% if (success) { %>
+  <p class="message success"><%= success %></p>
+<% } %>
+
+<% if (error) { %>
+  <p class="message error"><%= error %></p>
+<% } %>
+
 <section class="panel">
-  <div class="panel-head">
-    <h2>Add Category</h2>
-  </div>
-
-  <% if (typeof error !== 'undefined' && error) { %>
-    <p class="error-msg"><%= error %></p>
-  <% } %>
-
-  <form action="/categories/add" method="POST" class="form-row">
-    <input type="text" name="name" placeholder="e.g. Travel" required>
-    <button type="submit" class="btn btn-primary">Add</button>
+  <h2>Add Category</h2>
+  <form action="/categories/add" method="POST" class="add-form">
+    <label for="name">Category name</label>
+    <div class="form-row">
+      <input id="name" name="name" type="text" maxlength="50" required placeholder="Example: Education">
+      <button type="submit" class="button primary">Add Category</button>
+    </div>
   </form>
 </section>
 
 <section class="panel">
-  <div class="panel-head">
-    <h2>Existing Categories</h2>
-  </div>
+  <h2>Existing Categories</h2>
 
   <% if (categories.length === 0) { %>
-    <p class="empty">No categories yet. Add one above.</p>
+    <p>No categories have been added.</p>
   <% } else { %>
-    <ul class="category-list">
-      <% categories.forEach(function(cat) { %>
-        <li><%= cat.name %></li>
-      <% }); %>
-    </ul>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Expenses Using Category</th>
+            <th class="actions-heading">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% categories.forEach(function(category) { %>
+            <tr>
+              <td><strong><%= category.name %></strong></td>
+              <td><span class="count"><%= category.expense_count %></span></td>
+              <td class="actions">
+                <a class="button" href="/categories/edit/<%= category.id %>">Edit</a>
+                <form action="/categories/delete/<%= category.id %>" method="POST"
+                      onsubmit="return confirm('Delete this category?');">
+                  <button class="button danger" type="submit"
+                          <%= category.expense_count > 0 ? 'disabled title="Remove its expenses before deleting"' : '' %>>
+                    Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
   <% } %>
 </section>
 
