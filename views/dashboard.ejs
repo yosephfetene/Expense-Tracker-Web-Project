@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+
+<section class="page-head">
+  <div>
+    <h1>Dashboard</h1>
+    <p class="subtitle">A quick overview of your spending</p>
+  </div>
+  <a href="/expenses/add" class="btn btn-primary">+ Add Expense</a>
+</section>
+
+<section class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-label">Total Spent</span>
+    <span class="stat-value">$<%= Number(total).toFixed(2) %></span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Total Entries</span>
+    <span class="stat-value"><%= count %></span>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Recent Expenses</h2>
+    <a href="/expenses" class="link">View all &rarr;</a>
+  </div>
+
+  <% if (recent.length === 0) { %>
+    <p class="empty">No expenses recorded yet. <a href="/expenses/add">Add your first one</a>.</p>
+  <% } else { %>
+    <table class="table">
+      <thead>
+        <tr>
