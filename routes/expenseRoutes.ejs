@@ -1,0 +1,23 @@
+const express = require('express');
+const router = express.Router();
+const expenseController = require('../controllers/expenseController');
+
+// GET /expenses -> View all expenses
+router.get('/', expenseController.listExpenses);
+
+// GET /expenses/add -> Show add form
+router.get('/add', expenseController.showAddForm);
+
+// POST /expenses/add -> Save new expense
+router.post('/add', expenseController.addExpense);
+
+// GET /expenses/edit/:id -> Show edit form
+router.get('/edit/:id', expenseController.showEditForm);
+
+// POST /expenses/edit/:id -> Update expense
+router.post('/edit/:id', expenseController.updateExpense);
+
+// POST /expenses/delete/:id -> Delete expense
+router.post('/delete/:id', expenseController.deleteExpense);
+
+module.exports = router;
