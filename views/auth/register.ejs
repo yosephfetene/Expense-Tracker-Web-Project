@@ -1,0 +1,54 @@
+<%- include('../partials/header') %>
+
+<section class="page-head page-head-center">
+  <div>
+    <h1>Create Account</h1>
+    <p class="subtitle">Sign up and start managing your expenses effortlessly.</p>
+  </div>
+</section>
+
+<section class="panel auth-panel">
+  <div class="auth-layout">
+    <div class="auth-copy">
+      <h2>Start tracking in minutes</h2>
+      <p>Create a secure account and access your personal budget dashboard any time.</p>
+      <ul class="auth-benefits">
+        <li>Save your expenses privately</li>
+        <li>Use categories to organize spending</li>
+        <li>See totals and recent activity at a glance</li>
+      </ul>
+    </div>
+
+    <div class="auth-form">
+      <% if (error) { %>
+        <p class="error-msg"><%= error %></p>
+      <% } %>
+
+      <form action="/register" method="POST" class="form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" value="<%= username %>" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Create a strong password" autocomplete="new-password" required>
+          <p class="password-note">Choose at least 6 characters with letters and numbers.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="passwordConfirm">Confirm Password</label>
+          <input id="passwordConfirm" name="passwordConfirm" type="password" placeholder="Re-enter password" autocomplete="new-password" required>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Create Account</button>
+        </div>
+      </form>
+
+      <p class="form-note">Already have an account? <a href="/login">Log in</a> instead.</p>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

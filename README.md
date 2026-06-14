@@ -1,95 +1,92 @@
 # Expense Tracker
 
-A simple expense tracker built with Express, EJS, and PostgreSQL. The app uses server-rendered pages for viewing expenses, adding new expenses, editing existing expenses, deleting expenses, and managing categories.
+A simple full-stack expense tracker built with **Express**, **EJS**, and **PostgreSQL**, using the MVC (Model-View-Controller) pattern. The UI uses a clean, monochrome (black / white / gray) design.
 
 ## Features
 
-- Dashboard with total spending, entry count, and recent expenses
-- Expense list with category, date, amount, edit, and delete actions
-- Add and edit expense forms
-- Category list and category creation
-- PostgreSQL-backed data storage
-
-## Tech Stack
-
-- Node.js
-- Express
-- EJS
-- PostgreSQL
-- pg
-- dotenv
+- **Dashboard**: total spent, total entries, and a list of recent expenses
+- **Expenses**: list, add, edit, and delete expenses
+- **Categories**: list and add categories, assign categories to expenses
+- EJS **partials** (`header.ejs` / `footer.ejs`) reused across every page
+- Express **routing**, **middleware** (logger, form parsing, error handling, 404 handler)
+- Full **CRUD** against PostgreSQL via the `pg` library
 
 ## Project Structure
 
-```text
-app.js                  Express app entry point
-controllers/            Request handlers
-models/                 PostgreSQL query logic
-routes/                 Route definitions
-views/                  EJS templates
-public/css/style.css    App styling
-db/schema.sql           Database schema
-db/seed.sql             Sample data
+```
+expense-tracker/
+├── app.js                  # Express app entry point
+├── config/db.js            # PostgreSQL connection pool
+├── models/                 # Database query logic
+├── controllers/            # Business logic / request handlers
+├── routes/                 # Express routers
+├── middleware/             # Error handling middleware
+├── views/                  # EJS templates (+ partials)
+├── public/css/style.css    # Monochrome styling
+└── db/                      # schema.sql + seed.sql
 ```
 
 ## Setup
 
-Install dependencies:
+### 1. Install dependencies
 
 ```bash
+cd expense-tracker
 npm install
 ```
 
-Create a local environment file:
+### 2. Create the PostgreSQL database
 
-```bash
-cp .env.example .env
-```
-
-Create the PostgreSQL database:
+Create a database (default name used in `.env` is `expense_tracker`):
 
 ```bash
 createdb expense_tracker
 ```
 
-Load the schema and sample data:
+### 3. Run the schema and seed scripts
 
 ```bash
 psql -d expense_tracker -f db/schema.sql
 psql -d expense_tracker -f db/seed.sql
 ```
 
-Start the app:
+### 4. Configure environment variables
+
+Edit `.env` with your PostgreSQL credentials:
+
+```
+DB_USER=postgres
+DB_HOST=localhost
+DB_NAME=expense_tracker
+DB_PASSWORD=postgres
+DB_PORT=5432
+PORT=3000
+```
+
+### 5. Start the server
 
 ```bash
 npm start
 ```
 
-Open the app:
+Or, with auto-reload during development (requires `nodemon`):
 
-```text
-http://localhost:3000
+```bash
+npm run dev
 ```
 
-## Environment Variables
+The app will be available at **http://localhost:3000**.
 
-```env
-DATABASE_URL=postgres://localhost:5432/expense_tracker
-PORT=3000
-```
+## Routes
 
-Do not commit your real `.env` file. Use `.env.example` as the shared template.
-
-## Main Routes
-
-```text
-GET  /                    Dashboard
-GET  /expenses            List expenses
-GET  /expenses/add        Show add expense form
-POST /expenses/add        Create expense
-GET  /expenses/edit/:id   Show edit expense form
-POST /expenses/edit/:id   Update expense
-POST /expenses/delete/:id Delete expense
-GET  /categories          List categories
-POST /categories/add      Create category
-```
+| Method | Path                  | Description            |
+|--------|-----------------------|------------------------|
+| GET    | `/`                    | Dashboard              |
+| GET    | `/expenses`            | List all expenses      |
+| GET    | `/expenses/add`        | Show add expense form  |
+| POST   | `/expenses/add`        | Create a new expense   |
+| GET    | `/expenses/edit/:id`   | Show edit expense form |
+| POST   | `/expenses/edit/:id`   | Update an expense      |
+| POST   | `/expenses/delete/:id` | Delete an expense      |
+| GET    | `/categories`          | List categories        |
+| POST   | `/categories/add`      | Create a new category  |
