@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const categoryController = require('../controllers/categoryController');
 
+// GET /categories -> View all categories
 router.get('/', categoryController.listCategories);
+
+// POST /categories/add -> Save new category
 router.post('/add', categoryController.addCategory);
 
 module.exports = router;

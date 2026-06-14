@@ -1,17 +1,18 @@
 const expenseModel = require('../models/expenseModel');
 const categoryModel = require('../models/categoryModel');
 
+// GET / -> Dashboard with summary stats and recent expenses
 const showDashboard = async (req, res, next) => {
   try {
-    const [summary, recent] = await Promise.all([
-      expenseModel.getSummary(),
-      expenseModel.getRecentExpenses(),
-    ]);
+    const expenses = await expenseModel.getAllExpenses();
+    const total = await expenseModel.getTotalAmount();
+    const count = await expenseModel.getExpenseCount();
+    const recent = expenses.slice(0, 5);
 
     res.render('dashboard', {
       title: 'Dashboard',
-      total: summary.total,
-      count: summary.count,
+      total,
+      count,
       recent,
     });
   } catch (err) {
@@ -19,56 +20,46 @@ const showDashboard = async (req, res, next) => {
   }
 };
 
+// GET /expenses -> List all expenses
 const listExpenses = async (req, res, next) => {
   try {
     const expenses = await expenseModel.getAllExpenses();
-
-    res.render('expenses/index', {
-      title: 'Expenses',
-      expenses,
-    });
+    res.render('expenses/index', { title: 'Expenses', expenses });
   } catch (err) {
     next(err);
   }
 };
 
+// GET /expenses/add -> Show add expense form
 const showAddForm = async (req, res, next) => {
   try {
     const categories = await categoryModel.getAllCategories();
-
-    res.render('expenses/add', {
-      title: 'Add Expense',
-      categories,
-    });
+    res.render('expenses/add', { title: 'Add Expense', categories });
   } catch (err) {
     next(err);
   }
 };
 
+// POST /expenses/add -> Save a new expense
 const addExpense = async (req, res, next) => {
-  const { title, amount, expense_date, category_id } = req.body;
+  try {
+    const { title, amount, expense_date, category_id } = req.body;
 
-  if (!title || !amount || !expense_date) {
-    try {
+    if (!title  !amount  !expense_date) {
       const categories = await categoryModel.getAllCategories();
-
       return res.status(400).render('expenses/add', {
         title: 'Add Expense',
         categories,
-        error: 'Title, amount, and date are required.',
+        error: 'Title, amount and date are required.',
       });
-    } catch (err) {
-      return next(err);
     }
-  }
 
-  try {
-    await expenseModel.createExpense({
-      title: title.trim(),
+    await expenseModel.createExpense(
+      title.trim(),
       amount,
       expense_date,
-      category_id,
-    });
+      category_id  null
+    );
 
     res.redirect('/expenses');
   } catch (err) {
@@ -76,12 +67,10 @@ const addExpense = async (req, res, next) => {
   }
 };
 
+// GET /expenses/edit/:id -> Show edit form for an expense
 const showEditForm = async (req, res, next) => {
   try {
-    const [expense, categories] = await Promise.all([
-      expenseModel.getExpenseById(req.params.id),
-      categoryModel.getAllCategories(),
-    ]);
+    const expense = await expenseModel.getExpenseById(req.params.id);
 
     if (!expense) {
       return res.status(404).render('error', {
@@ -90,33 +79,25 @@ const showEditForm = async (req, res, next) => {
       });
     }
 
-    res.render('expenses/edit', {
-      title: 'Edit Expense',
-      expense,
-      categories,
-    });
+    const categories = await categoryModel.getAllCategories();
+    res.render('expenses/edit', { title: 'Edit Expense', expense, categories });
   } catch (err) {
     next(err);
   }
 };
 
+// POST /expenses/edit/:id -> Update an existing expense
 const updateExpense = async (req, res, next) => {
-  const { title, amount, expense_date, category_id } = req.body;
-
   try {
-    const expense = await expenseModel.updateExpense(req.params.id, {
-      title: title.trim(),
+    const { title, amount, expense_date, category_id } = req.body;
+
+    await expenseModel.updateExpense(
+      req.params.id,
+      title.trim(),
       amount,
       expense_date,
-      category_id,
-    });
-
-    if (!expense) {
-      return res.status(404).render('error', {
-        title: 'Not Found',
-        message: 'Expense not found.',
-      });
-    }
+      category_id  null
+    );
 
     res.redirect('/expenses');
   } catch (err) {
@@ -124,6 +105,7 @@ const updateExpense = async (req, res, next) => {
   }
 };
 
+// POST /expenses/delete/:id -> Delete an expense
 const deleteExpense = async (req, res, next) => {
   try {
     await expenseModel.deleteExpense(req.params.id);

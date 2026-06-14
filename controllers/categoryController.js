@@ -1,53 +1,35 @@
 const categoryModel = require('../models/categoryModel');
 
+// GET /categories -> List all categories
 const listCategories = async (req, res, next) => {
   try {
     const categories = await categoryModel.getAllCategories();
-
-    res.render('categories/index', {
-      title: 'Categories',
-      categories,
-    });
+    res.render('categories/index', { title: 'Categories', categories });
   } catch (err) {
     next(err);
   }
 };
 
+// POST /categories/add -> Create a new category
 const addCategory = async (req, res, next) => {
-  const name = req.body.name && req.body.name.trim();
+  try {
+    const { name } = req.body;
 
-  if (!name) {
-    try {
+    if (name && name.trim() !== '') {
+      await categoryModel.createCategory(name.trim());
+    }
+
+    res.redirect('/categories');
+  } catch (err) {
+    // Handle duplicate category name gracefully (unique constraint)
+    if (err.code === '23505') {
       const categories = await categoryModel.getAllCategories();
-
       return res.status(400).render('categories/index', {
         title: 'Categories',
         categories,
-        error: 'Category name is required.',
+        error: 'That category already exists.',
       });
-    } catch (err) {
-      return next(err);
     }
-  }
-
-  try {
-    await categoryModel.createCategory(name);
-    res.redirect('/categories');
-  } catch (err) {
-    if (err.code === '23505') {
-      try {
-        const categories = await categoryModel.getAllCategories();
-
-        return res.status(400).render('categories/index', {
-          title: 'Categories',
-          categories,
-          error: 'That category already exists.',
-        });
-      } catch (innerErr) {
-        return next(innerErr);
-      }
-    }
-
     next(err);
   }
 };
