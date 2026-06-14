@@ -1,56 +1,82 @@
 <%- include('../partials/header') %>
 
-<section class="page-heading">
+<section class="page-head">
   <div>
     <h1>Category Management</h1>
-    <p>Add, edit, and safely delete expense categories.</p>
+    <p class="subtitle">Manage categories and understand where money is being spent</p>
   </div>
 </section>
 
 <% if (success) { %>
-  <p class="message success"><%= success %></p>
+  <p class="success-msg"><%= success %></p>
 <% } %>
 
 <% if (error) { %>
-  <p class="message error"><%= error %></p>
+  <p class="error-msg"><%= error %></p>
 <% } %>
 
+<section class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-label">Categorized Spending</span>
+    <span class="stat-value">$<%= Number(totalSpent).toFixed(2) %></span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Categorized Expenses</span>
+    <span class="stat-value"><%= totalExpenses %></span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Categories</span>
+    <span class="stat-value"><%= categories.length %></span>
+  </div>
+</section>
+
 <section class="panel">
-  <h2>Add Category</h2>
-  <form action="/categories/add" method="POST" class="add-form">
-    <label for="name">Category name</label>
-    <div class="form-row">
-      <input id="name" name="name" type="text" maxlength="50" required placeholder="Example: Education">
-      <button type="submit" class="button primary">Add Category</button>
-    </div>
+  <div class="panel-head">
+    <h2>Add Category</h2>
+  </div>
+  <form action="/categories/add" method="POST" class="form-row">
+    <input id="name" name="name" type="text" maxlength="50" required
+           aria-label="Category name" placeholder="Example: Education">
+    <button type="submit" class="btn btn-primary">Add Category</button>
   </form>
 </section>
 
 <section class="panel">
-  <h2>Existing Categories</h2>
+  <div class="panel-head">
+    <h2>Spending by Category</h2>
+  </div>
 
   <% if (categories.length === 0) { %>
-    <p>No categories have been added.</p>
+    <p class="empty">No categories have been added.</p>
   <% } else { %>
     <div class="table-wrapper">
-      <table>
+      <table class="table category-table">
         <thead>
           <tr>
             <th>Name</th>
-            <th>Expenses Using Category</th>
-            <th class="actions-heading">Actions</th>
+            <th>Expenses</th>
+            <th class="num">Total Spent</th>
+            <th>Share</th>
+            <th class="actions-col">Actions</th>
           </tr>
         </thead>
         <tbody>
           <% categories.forEach(function(category) { %>
             <tr>
               <td><strong><%= category.name %></strong></td>
-              <td><span class="count"><%= category.expense_count %></span></td>
+              <td><span class="tag"><%= category.expense_count %></span></td>
+              <td class="num">$<%= Number(category.total_spent).toFixed(2) %></td>
+              <td class="share-cell">
+                <div class="share-bar" aria-label="<%= category.spending_percentage.toFixed(1) %> percent of categorized spending">
+                  <span style="width: <%= category.spending_percentage.toFixed(1) %>%"></span>
+                </div>
+                <small><%= category.spending_percentage.toFixed(1) %>%</small>
+              </td>
               <td class="actions">
-                <a class="button" href="/categories/edit/<%= category.id %>">Edit</a>
-                <form action="/categories/delete/<%= category.id %>" method="POST"
+                <a class="btn btn-small" href="/categories/edit/<%= category.id %>">Edit</a>
+                <form class="inline-form" action="/categories/delete/<%= category.id %>" method="POST"
                       onsubmit="return confirm('Delete this category?');">
-                  <button class="button danger" type="submit"
+                  <button class="btn btn-small btn-danger" type="submit"
                           <%= category.expense_count > 0 ? 'disabled title="Remove its expenses before deleting"' : '' %>>
                     Delete
                   </button>

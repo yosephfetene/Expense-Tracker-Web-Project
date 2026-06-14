@@ -22,10 +22,26 @@ function databaseMessage(error) {
 async function listCategories(req, res, next) {
   try {
     const categories = await categoryModel.findAllWithExpenseCounts();
+    const totalSpent = categories.reduce(
+      (sum, category) => sum + Number(category.total_spent),
+      0
+    );
+    const totalExpenses = categories.reduce(
+      (sum, category) => sum + category.expense_count,
+      0
+    );
+    const categoriesWithPercentages = categories.map((category) => ({
+      ...category,
+      spending_percentage: totalSpent > 0
+        ? (Number(category.total_spent) / totalSpent) * 100
+        : 0,
+    }));
 
     res.render('categories/index', {
       title: 'Categories',
-      categories,
+      categories: categoriesWithPercentages,
+      totalSpent,
+      totalExpenses,
       success: req.query.success || '',
       error: req.query.error || '',
     });

@@ -286,6 +286,17 @@ body {
   border-color: var(--black);
 }
 
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.btn:disabled:hover {
+  background-color: var(--white);
+  color: var(--black);
+  border-color: var(--light-gray);
+}
+
 /* ---------- Forms ---------- */
 
 .form,
@@ -384,6 +395,47 @@ select:focus {
   margin-bottom: 16px;
   font-size: 0.9rem;
   color: var(--dark-gray);
+}
+
+.success-msg {
+  background-color: var(--white);
+  border: 1px solid var(--light-gray);
+  border-left: 4px solid var(--dark-gray);
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.share-cell {
+  min-width: 150px;
+}
+
+.share-bar {
+  width: 100px;
+  height: 7px;
+  overflow: hidden;
+  display: inline-block;
+  margin-right: 6px;
+  border-radius: 999px;
+  background-color: var(--light-gray);
+  vertical-align: middle;
+}
+
+.share-bar span {
+  display: block;
+  height: 100%;
+  background-color: var(--black);
+}
+
+.share-cell small {
+  color: var(--mid-gray);
+  white-space: nowrap;
 }
 
 /* ---------- Footer ---------- */

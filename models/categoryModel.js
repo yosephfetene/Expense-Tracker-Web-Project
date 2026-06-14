@@ -5,11 +5,12 @@ async function findAllWithExpenseCounts() {
     SELECT
       c.id,
       c.name,
-      COUNT(e.id)::INTEGER AS expense_count
+      COUNT(e.id)::INTEGER AS expense_count,
+      COALESCE(SUM(e.amount), 0)::NUMERIC(12, 2) AS total_spent
     FROM categories c
     LEFT JOIN expenses e ON e.category_id = c.id
     GROUP BY c.id, c.name
-    ORDER BY LOWER(c.name)
+    ORDER BY total_spent DESC, LOWER(c.name)
   `);
 
   return result.rows;
