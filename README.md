@@ -55,13 +55,19 @@ Create the PostgreSQL database used by the app.
 psql -d expense_tracker -f db/schema.sql
 ```
 
-### 4. Seed sample data
+### 4. Seed sample data (optional)
+
+If you want example expenses for testing, run:
 
 ```bash
 psql -d expense_tracker -f db/seed.sql
 ```
 
+> Note: `db/seed.sql` is for local testing only and should not be committed to the repository.
+
 ### 5. Configure environment variables
+
+Create a `.env` file in the project root and do not commit it.
 
 Create a `.env` file with values like:
 

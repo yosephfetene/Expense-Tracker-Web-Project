@@ -9,6 +9,43 @@
 </section>
 
 <section class="panel">
+  <div class="panel-head">
+    <h2>Monthly expense performance</h2>
+    <span class="subtitle">Track every month and compare growth or decline.</span>
+  </div>
+
+  <% if (monthlyHistory.length === 0) { %>
+    <p class="empty">No monthly expense data available yet.</p>
+  <% } else { %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th class="num">Total</th>
+          <th class="num">Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% monthlyHistory.forEach(function(month) { %>
+          <tr>
+            <td><%= month.month %></td>
+            <td class="num">$<%= month.total.toFixed(2) %></td>
+            <td class="num <%= month.trend === 'up' ? 'trend-up' : 'trend-down' %>">
+              <%= month.sign %>$<%= Math.abs(month.difference).toFixed(2) %>
+              <% if (month.percent !== null) { %>
+                (<%= month.percent %>%)
+              <% } else { %>
+                (–)
+              <% } %>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<section class="panel">
   <% if (expenses.length === 0) { %>
     <p class="empty">No expenses recorded yet. <a href="/expenses/add">Add your first one</a>.</p>
   <% } else { %>

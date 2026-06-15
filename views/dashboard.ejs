@@ -19,6 +19,25 @@
   </div>
 </section>
 
+<section class="comparison-grid">
+  <div class="comparison-card">
+    <span class="stat-label">This month</span>
+    <span class="stat-value">$<%= Number(dashboardComparison.currentMonth.total).toFixed(2) %></span>
+    <span class="trend <%= dashboardComparison.currentMonth.trend === 'up' ? 'trend-up' : 'trend-down' %>">
+      <%= dashboardComparison.currentMonth.sign %>$<%= Math.abs(dashboardComparison.currentMonth.difference).toFixed(2) %>
+      <% if (dashboardComparison.currentMonth.percent !== null) { %>
+        (<%= dashboardComparison.currentMonth.percent %>%)
+      <% } %>
+      vs last month
+    </span>
+  </div>
+  <div class="comparison-card">
+    <span class="stat-label">Last month</span>
+    <span class="stat-value">$<%= Number(dashboardComparison.lastMonth.total).toFixed(2) %></span>
+    <span class="trend muted"><%= dashboardComparison.lastMonth.month %></span>
+  </div>
+</section>
+
 <section class="panel">
   <div class="panel-head">
     <h2>Recent Expenses</h2>
